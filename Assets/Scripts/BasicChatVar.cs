@@ -5,5 +5,5 @@ using basic_clientserver;
 public class BasicChatVar : MonoBehaviour {
 
     public static BasicChat basicChat;
-    public static int playerNumber;
+    public static int playerNumber = 0;
 }

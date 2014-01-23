@@ -83,7 +83,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
             component.enabled = true;
         }
 
-        if (this.name == "FrameMarker1")
+        if (this.transform.tag == "AutoMarker")
         {
             autoFokusLost = false;
         }
@@ -109,7 +109,7 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
             component.enabled = false;
         }
 
-        if (this.name == "FrameMarker1")
+        if (this.transform.tag == "AutoMarker")
         {
             autoFokusLost = true;
         }
@@ -119,9 +119,17 @@ public class DefaultTrackableEventHandler : MonoBehaviour,
 
     void OnGUI()
     {
+        //Wenn Fokus des Autos verloren ging, dann Meldung anzeigen
         if (autoFokusLost)
         {
-            GUI.Button(new Rect(Screen.width / 2 - 300/2, Screen.height/2 - 75/2, 300, 75), "Sie Müssen den Focus auf das Auto legen!");
+            if (this.transform.name == "FrameMarkerAuto0" && (BasicChatVar.playerNumber == 0 || BasicChatVar.playerNumber == 1))
+            {
+                GUI.Box(new Rect(Screen.width / 2 - 300 / 2, Screen.height / 2 - 75 / 2, 300, 75), "Sie Müssen den Focus auf das Grüne Auto legen!");
+            }
+            else if (this.transform.name == "FrameMarkerAuto1" && BasicChatVar.playerNumber == 2)
+            {
+                GUI.Box(new Rect(Screen.width / 2 - 300 / 2, Screen.height / 2 - 75 / 2, 300, 75), "Sie Müssen den Focus auf das Rote Auto legen!");
+            }
         }
     }
 

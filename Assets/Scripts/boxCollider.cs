@@ -7,18 +7,20 @@ public class boxCollider : MonoBehaviour {
 
     private GUIStyle pointStyle;
 
+    private GameObject autoObject;
+
     //private bool picked = false;
 
     public static ArrayList pickedObject = new ArrayList();
 
     void OnCollisionStay(Collision other)
     {
-        if (other != null)
+        if (other != null && this == autoObject)
         {
             //Debug.Log(" Kollision!! Kollision!!Kollision!! Kollision!! Kollision!!" + other.transform.name);
             if (other.transform.tag == "Cube")
             {
-                other.transform.gameObject.transform.parent = GameObject.Find("Auto").transform.parent;
+                other.transform.gameObject.transform.parent = autoObject.transform.parent;
                 other.rigidbody.constraints |= (RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ);
                 other.rigidbody.useGravity = false;
                 if (!pickedObject.Contains(other.transform.name))
@@ -31,7 +33,7 @@ public class boxCollider : MonoBehaviour {
             {
                 if (pickedObject.Count > 0)
                 {
-                    Debug.Log("------------------- Punkte ---------- " + points);
+                    //Debug.Log("------------------- Punkte ---------- " + points);
                     foreach(string pickObj in pickedObject){
                         points++;
                         Destroy(GameObject.Find(pickObj));
@@ -51,23 +53,33 @@ public class boxCollider : MonoBehaviour {
 
     void Update()
     {
-        if (Input.touchCount > 0)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit))
-            {
-                Debug.Log(" You just hit " + hit.collider.gameObject.name);
-                if (hit.collider.name == "Auto")
-                {
-                    Destroy(GameObject.Find("Cube"));
-                }
-            }
-        }
+        //if (Input.touchCount > 0)
+        //{
+        //    Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+        //    RaycastHit hit;
+        //    if (Physics.Raycast(ray, out hit))
+        //    {
+        //        Debug.Log(" You just hit " + hit.collider.gameObject.name);
+        //        if (hit.collider.name == "Auto")
+        //        {
+        //            Destroy(GameObject.Find("Cube"));
+        //        }
+        //    }
+        //}
     }
 
     void Start()
     {
         CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_NORMAL);
+
+        //Überprüfen welches Model Verwendet werden soll um Punkte zu erreichen
+        if (BasicChatVar.playerNumber == 1 || BasicChatVar.playerNumber == 0)
+        {
+            autoObject = GameObject.Find("Auto0");
+        }
+        else
+        {
+            autoObject = GameObject.Find("Auto1");
+        }
     }
 }
