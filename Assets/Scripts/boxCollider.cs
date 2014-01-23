@@ -11,7 +11,7 @@ public class boxCollider : MonoBehaviour {
 
     public static ArrayList pickedObject = new ArrayList();
 
-    void OnCollisionEnter(Collision other)
+    void OnCollisionStay(Collision other)
     {
         if (other != null)
         {
@@ -45,10 +45,8 @@ public class boxCollider : MonoBehaviour {
 
     void OnGUI()
     {
-        pointStyle = new GUIStyle();
-        pointStyle.normal.textColor = Color.black;
-        GUI.backgroundColor = Color.white;
-        GUI.Button(new Rect(100, 10, 150, 25), "Anzahl Punkte: " + points);
+        GUI.contentColor = Color.black;
+        GUI.Box(new Rect(100, 10, 150, 25), "Anzahl Punkte: " + points);
     }
 
     void Update()
@@ -66,5 +64,10 @@ public class boxCollider : MonoBehaviour {
                 }
             }
         }
+    }
+
+    void Start()
+    {
+        CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_NORMAL);
     }
 }

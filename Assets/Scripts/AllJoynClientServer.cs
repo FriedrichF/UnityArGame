@@ -37,7 +37,9 @@ public class AllJoynClientServer : MonoBehaviour
         int i = 0;
         int xStart = (Screen.height / 2) + 10 + ((i++) * BUTTON_SIZE);
 
-        GUI.Button(new Rect(100, 45, 150, 25), "Gegner Punkte: " + BasicChat.points);
+        GUI.contentColor = Color.black;
+
+        GUI.Box(new Rect(100, 45, 150, 25), "Gegner Punkte: " + BasicChat.points);
 
         if ((BasicChat.points + boxCollider.points) == 2 || gameOver)
         {

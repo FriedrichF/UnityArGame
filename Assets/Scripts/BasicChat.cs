@@ -241,7 +241,7 @@ namespace basic_clientserver
 
         public BasicChat()
         {
-            StartUp();
+            //StartUp();
         }
 
 
@@ -330,7 +330,7 @@ namespace basic_clientserver
                     }
                 }
 
-                myAdvertisedName = SERVICE_NAME + "._" + msgBus.GlobalGUIDString;
+                //myAdvertisedName = SERVICE_NAME + "._" + msgBus.GlobalGUIDString;
 
                 AllJoyn.InterfaceDescription.Member chatMember = testIntf.GetMember("chat");
                 status = msgBus.RegisterSignalHandler(this.ChatSignalHandler, chatMember, null);
@@ -363,11 +363,11 @@ namespace basic_clientserver
                     Debug.Log("Chat add Match " + status.ToString());
                 }
             }
-
+            /*
             // Request name
             if (status)
             {
-
+                
                 status = msgBus.RequestName(myAdvertisedName,
                     AllJoyn.DBus.NameFlags.ReplaceExisting | AllJoyn.DBus.NameFlags.DoNotQueue);
                 if (!status)
@@ -376,7 +376,7 @@ namespace basic_clientserver
                     Debug.Log("Chat RequestName(" + SERVICE_NAME + ") failed (status=" + status + ")");
                 }
             }
-
+            
             // Create session
             opts = new AllJoyn.SessionOpts(AllJoyn.SessionOpts.TrafficType.Messages, false,
                     AllJoyn.SessionOpts.ProximityType.Any, AllJoyn.TransportMask.Any);
@@ -405,6 +405,7 @@ namespace basic_clientserver
                     Debug.Log("Chat Failed to advertise name " + myAdvertisedName + " (" + status + ")");
                 }
             }
+            
 
             status = msgBus.FindAdvertisedName(SERVICE_NAME);
             if (!status)
@@ -412,8 +413,63 @@ namespace basic_clientserver
                 chatText = "Chat org.alljoyn.Bus.FindAdvertisedName failed.\n" + chatText;
                 Debug.Log("Chat org.alljoyn.Bus.FindAdvertisedName failed.");
             }
-
+            */
             Debug.Log("Completed ChatService Constructor");
+        }
+
+        public void createAndAdvertiseSession(string name)
+        {
+            AllJoyn.QStatus status = AllJoyn.QStatus.OK;
+            myAdvertisedName = SERVICE_NAME + "._" + name + "_" + msgBus.GlobalGUIDString;
+            
+            if (status)
+            {
+
+                status = msgBus.RequestName(myAdvertisedName,
+                    AllJoyn.DBus.NameFlags.ReplaceExisting | AllJoyn.DBus.NameFlags.DoNotQueue);
+                if (!status)
+                {
+                    chatText = "Chat RequestName(" + SERVICE_NAME + ") failed (status=" + status + ")\n" + chatText;
+                    Debug.Log("Chat RequestName(" + SERVICE_NAME + ") failed (status=" + status + ")");
+                }
+            }
+
+            
+            // Create session
+            opts = new AllJoyn.SessionOpts(AllJoyn.SessionOpts.TrafficType.Messages, false,
+                    AllJoyn.SessionOpts.ProximityType.Any, AllJoyn.TransportMask.Any);
+            if (status)
+            {
+
+                ushort sessionPort = SERVICE_PORT;
+                sessionPortListener = new MySessionPortListener();
+                status = msgBus.BindSessionPort(ref sessionPort, opts, sessionPortListener);
+                if (!status || sessionPort != SERVICE_PORT)
+                {
+                    chatText = "Chat BindSessionPort failed (" + status + ")\n" + chatText;
+                    Debug.Log("Chat BindSessionPort failed (" + status + ")");
+                }
+                chatText = "Chat BindSessionPort on port (" + sessionPort + ")\n" + chatText;
+                Debug.Log("Chat BBindSessionPort on port (" + sessionPort + ")"); ;
+            }
+
+            // Advertise name
+            if (status)
+            {
+                status = msgBus.AdvertiseName(myAdvertisedName, opts.Transports);
+                if (!status)
+                {
+                    chatText = "Chat Failed to advertise name " + name + " (" + status + ")\n" + chatText;
+                    Debug.Log("Chat Failed to advertise name " + name + " (" + status + ")");
+                }
+            }
+
+            status = msgBus.FindAdvertisedName(SERVICE_NAME);
+            if (!status)
+            {
+                chatText = "Chat org.alljoyn.Bus.FindAdvertisedName failed.\n" + chatText;
+                Debug.Log("Chat org.alljoyn.Bus.FindAdvertisedName failed.");
+            }
         }
 
         public void ChatSignalHandler(AllJoyn.InterfaceDescription.Member member, string srcPath, AllJoyn.Message message)
