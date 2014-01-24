@@ -64,7 +64,7 @@ public class StartGame : MonoBehaviour {
             {
                 if (BasicChat.sFoundName.Contains(BasicChat.currentJoinedSession))
                 {
-                    BasicChatVar.playerNumber = 2;
+                    BasicChatVar.playerNumber = 0;
                 }
                 else
                 {

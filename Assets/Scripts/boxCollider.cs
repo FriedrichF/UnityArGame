@@ -7,27 +7,24 @@ public class boxCollider : MonoBehaviour {
 
     private GUIStyle pointStyle;
 
-    private GameObject autoObject;
-
-    //private bool picked = false;
+    private string[] autoObject = { "Auto0", "Auto1"};
 
     public static ArrayList pickedObject = new ArrayList();
 
     void OnCollisionStay(Collision other)
     {
-        if (other != null && this == autoObject)
+        if (other != null && this.transform.name == autoObject[BasicChatVar.playerNumber])
         {
             //Debug.Log(" Kollision!! Kollision!!Kollision!! Kollision!! Kollision!!" + other.transform.name);
             if (other.transform.tag == "Cube")
             {
-                other.transform.gameObject.transform.parent = autoObject.transform.parent;
+                other.transform.gameObject.transform.parent = GameObject.Find(autoObject[BasicChatVar.playerNumber]).transform.parent;
                 other.rigidbody.constraints |= (RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ);
                 other.rigidbody.useGravity = false;
                 if (!pickedObject.Contains(other.transform.name))
                 {
                     pickedObject.Add(other.transform.name);
                 }
-                //picked = true;
             }
             if (other.transform.name == "ZielBox")
             {
@@ -39,7 +36,6 @@ public class boxCollider : MonoBehaviour {
                         Destroy(GameObject.Find(pickObj));
                     }
                     pickedObject.Clear();
-                    //picked = false;
                 }
             }
         }
@@ -71,15 +67,5 @@ public class boxCollider : MonoBehaviour {
     void Start()
     {
         CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_NORMAL);
-
-        //Überprüfen welches Model Verwendet werden soll um Punkte zu erreichen
-        if (BasicChatVar.playerNumber == 1 || BasicChatVar.playerNumber == 0)
-        {
-            autoObject = GameObject.Find("Auto0");
-        }
-        else
-        {
-            autoObject = GameObject.Find("Auto1");
-        }
     }
 }
