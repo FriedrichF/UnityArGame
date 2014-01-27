@@ -11,21 +11,31 @@ public class boxCollider : MonoBehaviour {
 
     public static ArrayList pickedObject = new ArrayList();
 
-    void OnCollisionStay(Collision other)
+    void OnCollisionEnter(Collision other)
     {
+        //Wenn es sich um eine Kollision handelt und das Auto das eigene ist
         if (other != null && this.transform.name == autoObject[BasicChatVar.playerNumber])
         {
             //Debug.Log(" Kollision!! Kollision!!Kollision!! Kollision!! Kollision!!" + other.transform.name);
             if (other.transform.tag == "Cube")
             {
+                //Überträgt die Kindelemente an das Auto Objekt
                 other.transform.gameObject.transform.parent = GameObject.Find(autoObject[BasicChatVar.playerNumber]).transform.parent;
+                
+                //Fixiert das neue Objekt an der aktuellen Position
                 other.rigidbody.constraints |= (RigidbodyConstraints.FreezePositionX | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ);
+                
+                //Stellt Gravity aus
                 other.rigidbody.useGravity = false;
+
+                //Wenn das kollidierte Objekt noch nicht in der Liste ist, zu dieser hinzufügen
                 if (!pickedObject.Contains(other.transform.name))
                 {
                     pickedObject.Add(other.transform.name);
                 }
             }
+
+            //Wenn es sich um die Zielbox handelt sollen eventuell aufgeladene Objekte abgeelgt werden und Punkte gezählt werden
             if (other.transform.name == "ZielBox")
             {
                 if (pickedObject.Count > 0)
