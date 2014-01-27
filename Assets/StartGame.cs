@@ -17,6 +17,7 @@ public class StartGame : MonoBehaviour {
 
     private string tmpSession;
 
+    //GUI Elemente für das Menü erzeugen
     void OnGUI()
     {
         int i = 0;

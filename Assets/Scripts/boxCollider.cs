@@ -51,12 +51,6 @@ public class boxCollider : MonoBehaviour {
         }
     }
 
-    void OnGUI()
-    {
-        GUI.contentColor = Color.black;
-        GUI.Box(new Rect(100, 10, 150, 25), "Anzahl Punkte: " + points);
-    }
-
     void Update()
     {
         //if (Input.touchCount > 0)
@@ -72,10 +66,5 @@ public class boxCollider : MonoBehaviour {
         //        }
         //    }
         //}
-    }
-
-    void Start()
-    {
-        CameraDevice.Instance.SetFocusMode(CameraDevice.FocusMode.FOCUS_MODE_NORMAL);
     }
 }
